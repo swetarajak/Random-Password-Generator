@@ -1,32 +1,34 @@
-// function renderHomePage(req,res){
-//     res.render('index',{ password: null});
-// }
-
 import crypto from 'crypto';
 
-function generatePassword(length = 12, includeUppercase = true, includeLowercase = true, includeNumbers = true, includeSymbols = true){
-    const charset = [];
-
-    if (includeUppercase) charset.push('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
-    if (includeLowercase) charset.push('abcdefghijklmnopqrstuvwxyz');
-    if (includeNumbers) charset.push('0123456789');
-    if (includeSymbols) charset.push('!@#$%*()_+=`~[]\{}|;\':",./<>?');
-
-    if (charset.length === 0){
-        throw new Error("At least one character set must be included");
-    }
-
-    const combinedCharset = charset.join('');
-    const charsetLength = combinedCharset.length;
-
+// Function to generate a random password
+function generatePassword(length = 12) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?';
     let password = '';
 
-    for(let i = 0; i < length; i++){
-        const randomValue = crypto.randomInt(0, charsetLength);
-        password += combinedCharset.charAt(randomValue);
+    for (let i = 0; i < length; i++) {
+        const randomIndex = crypto.randomInt(0, chars.length);
+        password += chars[randomIndex];
     }
 
     return password;
 }
 
-export {generatePassword};
+// Controller function for generating passwords
+exports.getPassword = (req, res) => {
+    const length = parseInt(req.query.length) || 12;
+
+    // Validate length (must be between 8 and 64)
+    if (length < 8 || length > 64) {
+        return res.status(400).json({
+            success: false,
+            message: 'Password length must be between 8 and 64 characters.'
+        });
+    }
+
+    const password = generatePassword(length);
+
+    res.json({
+        success: true,
+        password: password
+    });
+};
