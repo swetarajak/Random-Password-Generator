@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
 import { fileURLToPath } from 'url'; // Import this utility
+import { passwordRoutes } from "./Routes/password.js";
 
 const app = express();
 const port = 3000;
