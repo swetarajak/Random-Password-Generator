@@ -1,6 +1,9 @@
-import { generatePassword } from "../controllers/passwordControllers";
+import express from 'express';
+const { getPassword } = require('../controllers/passwordController');
 
-app.get('/generate-password', (req,res) => {
-    const password = generatePassword(16, true, true, true, true);
-    res.send(`Generated Password: ${password}`);
-});
+const router = express.Router();
+
+// Define the route for password generation
+router.get('/generate-password', getPassword);
+
+module.exports = router;
