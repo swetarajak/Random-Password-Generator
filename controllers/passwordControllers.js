@@ -14,7 +14,8 @@ function generatePassword(length = 12) {
 }
 
 // Controller function for generating passwords
-exports.getPassword = (req, res) => {
+export const getPassword = (req, res) => {
+    // Get the length from query parameters (e.g., /generate-password?length=12)
     const length = parseInt(req.query.length) || 12;
 
     // Validate length (must be between 8 and 64)
@@ -27,8 +28,12 @@ exports.getPassword = (req, res) => {
 
     const password = generatePassword(length);
 
-    res.json({
-        success: true,
-        password: password
-    });
+    // res.json({
+    //     success: true,
+    //     password: password
+    // });
+
+    return{
+        password
+    };
 };
